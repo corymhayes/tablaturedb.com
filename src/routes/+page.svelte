@@ -16,7 +16,7 @@
 	// data
 	import tabs from "$lib/data/tabs.json";
 
-	// export let data: PageData;
+	export let data: PageData;
 
 	type Tab = {
 		song: string;
@@ -74,10 +74,10 @@
 		</Tabs.List>
 
 		<Tabs.Content value="login">
-			<Login />
+			<Login data={data.loginForm} />
 		</Tabs.Content>
 		<Tabs.Content value="signup">
-			<SignUp />
+			<SignUp data={data.signupForm} />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

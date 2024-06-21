@@ -1,11 +1,16 @@
 import type { PageLoad } from "./$types";
-import PocketBase from "pocketbase";
+// import PocketBase from "pocketbase";
 
-const pb = new PocketBase("https://pocketbase.tablaturedb.com")
+import { loginSchema, signupSchema } from "$lib/schema";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { z } from "zod";
 
+// const pb = new PocketBase("https://pocketbase.tablaturedb.com");
 
 export const load: PageLoad = async ({ fetch, params }) => {
-  const user = await pb.collection("users").getOne("ut9ah3hbelduve0")
+	const loginForm = await superValidate(zod(loginSchema));
+	const signupForm = await superValidate(zod(signupSchema));
 
-  return { user }
-}
+	return { loginForm, signupForm };
+};
