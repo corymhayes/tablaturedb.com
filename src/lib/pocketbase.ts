@@ -2,7 +2,7 @@
 import PocketBase from "pocketbase";
 
 export function createInstance() {
-	return new PocketBase({{environment.POCKETBASE_URL}});
+	return new PocketBase($POCKETBASE_URL);
 }
 
 export const pb = createInstance();
