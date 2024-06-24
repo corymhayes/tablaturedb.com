@@ -5,20 +5,27 @@
 
 	// packages
 	import { writable } from "svelte/store";
-	import { createSvelteTable, flexRender, getCoreRowModel } from "@tanstack/svelte-table";
+	import {
+		createSvelteTable,
+		flexRender,
+		getCoreRowModel,
+		renderComponent
+	} from "@tanstack/svelte-table";
 
 	// Components
 	import * as Table from "$lib/components/ui/table";
 	import { Button } from "$lib/components/ui/button";
+	import Link from "$lib/components/Link.svelte";
 
 	// data
-	import tabs from "$lib/data/tabs.json";
 	import { pb } from "$lib/pocketbase";
 	import { applyAction, enhance } from "$app/forms";
+	import { prototypeKeysOf } from "@arktype/util";
 
 	export let data: PageData;
 
 	type Tab = {
+		id: string;
 		song: string;
 		artist: string;
 		tuning: string;
@@ -28,35 +35,39 @@
 
 	const defaultColumns: ColumnDef<Tab>[] = [
 		{
+			accessorKey: "id"
+		},
+		{
 			accessorKey: "song",
-			header: () => "Song",
-			cell: (info) => info.getValue()
+			header: "Song"
 		},
 		{
 			accessorKey: "artist",
-			header: () => "Artist",
-			cell: (info) => info.getValue()
+			header: "Artist"
 		},
 		{
 			accessorKey: "tuning",
-			header: () => "Tuning",
-			cell: (info) => info.getValue()
+			header: "Tuning"
 		},
 		{
 			accessorKey: "instrument",
-			header: () => "Instrument",
-			cell: (info) => info.getValue()
+			header: "Instrument"
 		},
 		{
 			accessorKey: "link",
 			header: () => "Link",
-			cell: (info) => info.getValue()
+			cell: (props) => renderComponent(Link, { link: props.getValue() })
 		}
 	];
 
 	const options = writable<TableOptions<Tab>>({
-		data: tabs,
+		data: data.records,
 		columns: defaultColumns,
+		state: {
+			columnVisibility: {
+				id: false
+			}
+		},
 		getCoreRowModel: getCoreRowModel()
 	});
 

@@ -6,6 +6,7 @@
 	import { pb } from "$lib/pocketbase";
 	import { currentUser } from "$lib/stores/user";
 
+	import * as Form from "$lib/components/ui/form";
 	import { Button } from "$lib/components/ui/button";
 	import { Toaster } from "$lib/components/ui/sonner";
 
@@ -27,7 +28,7 @@
 			};
 		}}
 	>
-		<Button>Logout</Button>
+		<Form.Button>Logout</Form.Button>
 	</form>
 {/if}
 
