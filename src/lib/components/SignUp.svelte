@@ -19,7 +19,7 @@
 	</Card.Header>
 
 	<Card.Content class="grid gap-4">
-		<form method="POST" use:enhance class="grid gap-4">
+		<form method="POST" use:enhance class="grid gap-4" action="?/signup">
 			<div class="grid grid-cols-2 gap-4">
 				<Form.Field {form} name="firstName">
 					<Form.Control let:attrs>
@@ -44,10 +44,18 @@
 				</Form.Control>
 			</Form.Field>
 
-			<Form.Field {form} name="password" class="mb-5">
+			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>
 					<Input {...attrs} type="password" bind:value={$formData.password} />
+					<Form.FieldErrors />
+				</Form.Control>
+			</Form.Field>
+
+			<Form.Field {form} name="confirmPassword" class="mb-5">
+				<Form.Control let:attrs>
+					<Label>Confirm Password</Label>
+					<Input {...attrs} type="password" bind:value={$formData.confirmPassword} />
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>

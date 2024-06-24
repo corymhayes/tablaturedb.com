@@ -22,7 +22,7 @@
 	</Card.Header>
 
 	<Card.Content>
-		<form method="POST" use:enhance class="grid gap-4">
+		<form method="POST" use:enhance class="grid gap-4" action="?/login">
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>

@@ -1,14 +1,13 @@
-import type { PageLoad } from "./$types";
+import type { PageServerLoad } from "./$types.js";
 import PocketBase from "pocketbase";
 
 import { forgotPasswordSchema } from "$lib/schema";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { z } from "zod";
 
 const pb = new PocketBase("https://pocketbase.tablaturedb.com");
 
-export const load: PageLoad = async () => {
+export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(forgotPasswordSchema));
 
 	return { form };
