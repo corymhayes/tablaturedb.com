@@ -12,6 +12,7 @@
 	import * as Tabs from "$lib/components/ui/tabs";
 	import Login from "$lib/components/Login.svelte";
 	import SignUp from "$lib/components/SignUp.svelte";
+	import BackgroundBlur from "$lib/components/BackgroundBlur.svelte";
 
 	// data
 	import tabs from "$lib/data/tabs.json";
@@ -63,9 +64,7 @@
 	const table = createSvelteTable(options);
 </script>
 
-<div
-	class="fixed z-50 flex h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm"
->
+<BackgroundBlur>
 	<h1 class="mb-4 scroll-m-20 text-4xl font-extrabold tracking-tight">TablatureDB</h1>
 	<Tabs.Root value="login">
 		<Tabs.List class="grid w-full grid-cols-2">
@@ -80,7 +79,7 @@
 			<SignUp data={data.signupForm} />
 		</Tabs.Content>
 	</Tabs.Root>
-</div>
+</BackgroundBlur>
 
 <Table.Root>
 	<Table.Header>

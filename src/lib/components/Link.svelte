@@ -2,4 +2,4 @@
 	export let link;
 </script>
 
-<a href={link} class="h-full pr-5">{link}</a>
+<a href={link} target="_blank" class="h-full pr-5">{link}</a>
