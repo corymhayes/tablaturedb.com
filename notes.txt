@@ -1,0 +1,2 @@
+// PB RULE
+// id = @request.auth.id
