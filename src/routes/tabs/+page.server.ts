@@ -3,7 +3,13 @@ import type { Actions, PageServerLoad } from "./$types";
 import { pb } from "$lib/pocketbase";
 import { message, fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { addTabSchema, updateTabSchema } from "$lib/schema";
+import {
+	addTabSchema,
+	updateTabSchema,
+	settingsSchema,
+	tuningSchema,
+	instrumentSchema
+} from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user == null) {
@@ -12,13 +18,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const addTabForm = await superValidate(zod(addTabSchema));
 	const updateTabForm = await superValidate(zod(updateTabSchema));
+	const settingsForm = await superValidate(zod(settingsSchema));
+	const tuningForm = await superValidate(zod(tuningSchema));
 
 	const records = await pb.collection("tabs").getFullList({
-		filter: `users.id ?= "${locals.user.id}"`,
-		sort: "song"
+		filter: `users.id ?= "${locals.user.id}"`
+		// sort: "song"
 	});
 
-	return { records, addTabForm, updateTabForm };
+	return { records, addTabForm, updateTabForm, settingsForm, tuningForm };
 };
 
 export const actions: Actions = {
@@ -83,5 +91,81 @@ export const actions: Actions = {
 		}
 
 		return message(updateTabForm, "Tab deleted!");
+	},
+	addTuning: async ({ locals, request }) => {
+		const tuningForm = await superValidate(request, zod(tuningSchema));
+
+		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const tunings = records.settings.tunings;
+		tunings.push(tuningForm.data.tuning);
+		records.settings.tunings = tunings;
+
+		try {
+			await locals.pb.collection("users").update(`${locals.user.id}`, {
+				settings: records.settings
+			});
+		} catch (e) {
+			console.log(e);
+		}
+
+		return message(tuningForm, "Tuning added!");
+	},
+	deleteTuning: async ({ locals, request }) => {
+		const tuningForm = await superValidate(request, zod(tuningSchema));
+
+		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const tunings = records.settings.tunings;
+		const tuningIndex = tunings.indexOf(tuningForm.data.tuning);
+		tunings.splice(tuningIndex, 1);
+
+		records.settings.tunings = tunings;
+
+		try {
+			await locals.pb.collection("users").update(`${locals.user.id}`, {
+				settings: records.settings
+			});
+		} catch (e) {
+			console.log(e);
+		}
+
+		return message(tuningForm, "Tuning deleted!");
+	},
+	addInstrument: async ({ locals, request }) => {
+		const instrumentForm = await superValidate(request, zod(instrumentSchema));
+
+		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const instruments = records.settings.instruments;
+		instruments.push(instrumentForm.data.instrument);
+		records.settings.instruments = instruments;
+
+		try {
+			await locals.pb.collection("users").update(`${locals.user.id}`, {
+				settings: records.settings
+			});
+		} catch (e) {
+			console.log(e);
+		}
+
+		return message(instrumentForm, "Tuning added!");
+	},
+	deleteInstrument: async ({ locals, request }) => {
+		const instrumentForm = await superValidate(request, zod(instrumentSchema));
+
+		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const instruments = records.settings.instruments;
+		const instrumentIndex = instruments.indexOf(instrumentForm.data.instrument);
+		instruments.splice(instrumentIndex, 1);
+
+		records.settings.instruments = instruments;
+
+		try {
+			await locals.pb.collection("users").update(`${locals.user.id}`, {
+				settings: records.settings
+			});
+		} catch (e) {
+			console.log(e);
+		}
+
+		return message(instrumentForm, "Tuning deleted!");
 	}
 };

@@ -7,6 +7,7 @@
 	import { toast } from "svelte-sonner";
 	import BackgroundBlur from "./BackgroundBlur.svelte";
 	import { Reload } from "svelte-radix";
+	import * as Select from "$lib/components/ui/select";
 
 	// packages
 	import { superForm } from "sveltekit-superforms";
@@ -53,13 +54,16 @@
 			}
 		}
 	});
-	const { form: _, enhance } = form;
+	const { form: formData, enhance } = form;
 
 	const handleEscape = ({ key }) => {
 		if (key === "Escape") {
 			editTab.set(false);
 		}
 	};
+
+	$: selectedTuning = tuning ? { label: tuning, value: tuning } : undefined;
+	$: selectedInstrument = instrument ? { label: instrument, value: instrument } : undefined;
 </script>
 
 <svelte:window on:keyup={handleEscape} />
@@ -88,18 +92,48 @@
 				</Form.Field>
 
 				<div class="flex gap-6">
-					<Form.Field {form} name="tuning">
+					<Form.Field {form} name="tuning" class="w-1/2">
 						<Form.Control let:attrs>
 							<Label>Tuning</Label>
-							<Input {...attrs} bind:value={tuning} placeholder={tuning} />
+							<Select.Root
+								selected={selectedTuning}
+								onSelectedChange={(v) => {
+									v && (tuning = v.value);
+								}}
+							>
+								<Select.Trigger {...attrs}>
+									<Select.Value placeholder={tuning} />
+								</Select.Trigger>
+								<Select.Content>
+									{#each data.user.settings.tunings as tuning}
+										<Select.Item value={tuning} label={tuning} />
+									{/each}
+								</Select.Content>
+							</Select.Root>
+							<input hidden bind:value={tuning} name={attrs.name} />
 							<Form.FieldErrors />
 						</Form.Control>
 					</Form.Field>
 
-					<Form.Field {form} name="instrument">
+					<Form.Field {form} name="instrument" class="w-1/2">
 						<Form.Control let:attrs>
 							<Label>Instrument</Label>
-							<Input {...attrs} bind:value={instrument} placeholder={instrument} />
+							<Select.Root
+								selected={selectedInstrument}
+								onSelectedChange={(v) => {
+									v && (instrument = v.value);
+								}}
+							>
+								<Select.Trigger {...attrs}>
+									<Select.Value placeholder={instrument} />
+								</Select.Trigger>
+								<Select.Content>
+									{#each data.user.settings.instruments as instrument}
+										<Select.Item value={instrument} label={instrument} />
+									{/each}
+								</Select.Content>
+							</Select.Root>
+							<input hidden bind:value={instrument} name={attrs.name} />
 							<Form.FieldErrors />
 						</Form.Control>
 					</Form.Field>

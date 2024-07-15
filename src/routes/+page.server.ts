@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from "./$types";
 
 import { loginSchema, signupSchema } from "$lib/schema";
-import { fail, superValidate } from "sveltekit-superforms";
+import { fail, superValidate, setError } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "@sveltejs/kit";
 
@@ -24,9 +24,8 @@ export const actions: Actions = {
 			await locals.pb
 				.collection("users")
 				.authWithPassword(form.data.email, form.data.password);
-		} catch (e) {
-			console.log(e);
-			throw e;
+		} catch {
+			return setError(form, "password", "Email and/or password do not match");
 		}
 
 		redirect(303, "/tabs");
@@ -52,7 +51,7 @@ export const actions: Actions = {
 				.authWithPassword(form.data.email, form.data.password);
 		} catch (e) {
 			console.log(e);
-			throw e;
+			return setError(form, "email", "User already exists");
 		}
 
 		redirect(303, "/tabs");

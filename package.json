@@ -41,7 +41,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tanstack/svelte-table": "^8.17.3",
-		"bits-ui": "^0.21.11",
+		"bits-ui": "^0.21.12",
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.5",
 		"formsnap": "^1.0.1",
