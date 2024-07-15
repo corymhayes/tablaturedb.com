@@ -38,14 +38,9 @@
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
-			<a
-				href="/forgot-password"
-				class="mb-5 ml-auto mt-[-10px] inline-block text-sm underline"
-			>
-				Forgot your password?
-			</a>
 
-			<Form.Button>Login</Form.Button>
+			<Form.Button class="mt-5">Login</Form.Button>
+			<a href="/forgot-password" class="text-center text-sm"> Forgot your password? </a>
 		</form>
 	</Card.Content>
 </Card.Root>

@@ -10,7 +10,7 @@
 
 	export let data;
 	const form = superForm(data, { validators: zodClient(signupSchema) });
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, errors } = form;
 </script>
 
 <Card.Root class="w-full max-w-sm">

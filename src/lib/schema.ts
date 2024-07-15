@@ -13,7 +13,10 @@ export const signupSchema = z
 		password: z.string().min(8, "Password must be at least 8 characters long."),
 		confirmPassword: z.string().min(8, "Password must be at least 8 characters long.")
 	})
-	.refine((data) => data.password == data.confirmPassword, "Passwords don't match");
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Passwords do not match",
+		path: ["confirmPassword"]
+	});
 
 export const forgotPasswordSchema = z.object({
 	email: z.string().email()
@@ -35,3 +38,19 @@ export const updateTabSchema = z.object({
 	instrument: z.string(),
 	link: z.string()
 });
+
+export const settingsSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(8, "Password must be at least 8 characters long."),
+	confirmPassword: z.string().min(8, "Password must be at least 8 characters long.")
+});
+
+export const tuningSchema = z.object({
+	tuning: z.string()
+});
+
+export const instrumentSchema = z.object({
+	instrument: z.string()
+});
+
+export type SettingsSchema = typeof settingsSchema;

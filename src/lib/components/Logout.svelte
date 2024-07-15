@@ -4,14 +4,8 @@
 
 	import { applyAction, enhance } from "$app/forms";
 	import { pb } from "$lib/pocketbase";
-
-	import { currentUser } from "$lib/stores/user";
-	export let data: PageData;
-
-	// $: currentUser.set(data.user);
 </script>
 
-<!-- {#if $currentUser} -->
 <form
 	method="POST"
 	action="/logout"
@@ -22,6 +16,9 @@
 		};
 	}}
 >
-	<Form.Button variant="link">Logout</Form.Button>
+	<Form.Button
+		tabindex="-1"
+		variant="link"
+		class="h-6 pl-0 font-normal text-white hover:no-underline">Logout</Form.Button
+	>
 </form>
-<!-- {/if} -->

@@ -20,11 +20,12 @@
 	import { TriangleDown, TriangleUp } from "svelte-radix";
 
 	// data
-	import { addTab, editTab } from "$lib/stores/actions";
+	import { addTab, editTab, showSettings } from "$lib/stores/actions";
 	import AddTab from "$lib/components/AddTab.svelte";
 	import Header from "$lib/components/Header.svelte";
 	import RowActions from "$lib/components/RowActions.svelte";
 	import EditTab from "$lib/components/EditTab.svelte";
+	import Settings from "$lib/components/Settings.svelte";
 
 	export let data: PageData;
 
@@ -36,6 +37,11 @@
 	let edit = false;
 	editTab.subscribe((value) => {
 		edit = value;
+	});
+
+	let settings = false;
+	showSettings.subscribe((value) => {
+		settings = value;
 	});
 
 	type Tab = {
@@ -97,14 +103,23 @@
 	};
 
 	const options = writable<TableOptions<Tab>>({
-		data: data.records,
 		columns: defaultColumns,
+		data: data.records,
+		initialState: {
+			sorting: [
+				{
+					id: "song",
+					desc: false
+				}
+			]
+		},
 		state: {
-			sorting,
+			// sorting,
 			columnVisibility: {
 				id: false
 			}
 		},
+		enableSortingRemoval: false,
 		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel()
@@ -125,7 +140,7 @@
 {:else if edit}
 	<EditTab {data} fn={refreshData} />
 {:else}
-	<Header />
+	<Header {data} fn={refreshData} />
 	<Table.Root>
 		<Table.Header>
 			{#each $table.getHeaderGroups() as headerGroup}

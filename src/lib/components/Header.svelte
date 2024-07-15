@@ -1,9 +1,15 @@
 <script lang="ts">
-	import { addTab } from "$lib/stores/actions";
+	import { addTab, showSettings } from "$lib/stores/actions";
 
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Avatar from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
-	import { Avatar, Plus } from "svelte-radix";
+	import { Plus } from "svelte-radix";
+	import Logout from "./Logout.svelte";
+	import Settings from "./Settings.svelte";
+
+	export let data;
+	export let fn;
 </script>
 
 <div>
@@ -16,7 +22,7 @@
 				Add tab
 			</Button>
 
-			<DropdownMenu.Root>
+			<DropdownMenu.Root disableFocusFirstItem={true}>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button
 						builders={[builder]}
@@ -24,21 +30,22 @@
 						size="icon"
 						class="overflow-hidden rounded-full"
 					>
-						<Avatar class="h-8 w-8" />
-						<!-- <img
-							src="./ks-avatar.jpg"
-							width={36}
-							height={36}
-							alt="Avatar"
-							class="overflow-hidden rounded-full"
-						/> -->
+						<!-- <Avatar class="h-8 w-8" /> -->
+						<!-- <Avatar.Root>
+							<Avatar.Image src="./avatars/sb-avatar.jpg" />
+						</Avatar.Root> -->
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end">
-					<DropdownMenu.Item>Settings</DropdownMenu.Item>
+					<!-- <DropdownMenu.Item on:click={() => showSettings.set(true)}
+						>Settings</DropdownMenu.Item
+					> -->
+					<Settings {data} {fn} />
 					<DropdownMenu.Item>Support</DropdownMenu.Item>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item><a href="./logout">Logout</a></DropdownMenu.Item>
+					<DropdownMenu.Item>
+						<Logout />
+					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</div>
