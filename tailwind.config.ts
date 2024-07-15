@@ -47,6 +47,9 @@ const config: Config = {
 				card: {
 					DEFAULT: "hsl(var(--card) / <alpha-value>)",
 					foreground: "hsl(var(--card-foreground) / <alpha-value>)"
+				},
+				backgroundImage: {
+					"hero-pattern": "url('/static/avatars/sb-avatar.jpg')"
 				}
 			},
 			borderRadius: {
@@ -58,7 +61,7 @@ const config: Config = {
 				sans: [...fontFamily.sans]
 			}
 		}
-	},
+	}
 };
 
 export default config;

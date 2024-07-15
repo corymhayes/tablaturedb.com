@@ -19,6 +19,11 @@
 
 	let className: string | undefined | null = undefined;
 
+	let settings = false;
+	showSettings.subscribe((value) => {
+		settings = value;
+	});
+
 	const [send, receive] = crossfade({
 		duration: 250,
 		easing: cubicInOut
@@ -57,8 +62,9 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<Dialog.Root>
-	<Dialog.Trigger class="text-sm">Settings</Dialog.Trigger>
+{@debug settings}
+
+<Dialog.Root open={settings} onOpenChange={() => showSettings.set(false)}>
 	<Dialog.Content class="max-w-4xl">
 		<Dialog.Header>
 			<Dialog.Title class="text-2xl font-bold tracking-tight">Settings</Dialog.Title>

@@ -12,6 +12,8 @@
 	export let fn;
 </script>
 
+<Settings {data} {fn} />
+
 <div>
 	<div class="flex h-14 items-center justify-between p-5">
 		<h4 class="scroll-m-20 text-2xl font-semibold tracking-tight">TablatureDB</h4>
@@ -31,16 +33,15 @@
 						class="overflow-hidden rounded-full"
 					>
 						<!-- <Avatar class="h-8 w-8" /> -->
-						<!-- <Avatar.Root>
+						<Avatar.Root>
 							<Avatar.Image src="./avatars/sb-avatar.jpg" />
-						</Avatar.Root> -->
+						</Avatar.Root>
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end">
-					<!-- <DropdownMenu.Item on:click={() => showSettings.set(true)}
-						>Settings</DropdownMenu.Item
-					> -->
-					<Settings {data} {fn} />
+					<DropdownMenu.Item on:click={() => showSettings.set(true)}>
+						Settings
+					</DropdownMenu.Item>
 					<DropdownMenu.Item>Support</DropdownMenu.Item>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item>
