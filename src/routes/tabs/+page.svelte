@@ -5,13 +5,7 @@
 
 	// packages
 	import { writable } from "svelte/store";
-	import {
-		createSvelteTable,
-		flexRender,
-		getCoreRowModel,
-		getSortedRowModel,
-		renderComponent
-	} from "@tanstack/svelte-table";
+	import { createSvelteTable, flexRender, getCoreRowModel, getSortedRowModel, renderComponent } from "@tanstack/svelte-table";
 
 	// Components
 	import * as Table from "$lib/components/ui/table";
@@ -140,21 +134,10 @@
 			{#each $table.getHeaderGroups() as headerGroup}
 				<Table.Row class="hover:bg-none! bg-secondary">
 					{#each headerGroup.headers as header}
-						<Table.Head
-							class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[10%] [&:nth-child(5)]:w-[40%]"
-						>
+						<Table.Head class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[10%] [&:nth-child(5)]:w-[40%]">
 							{#if !header.isPlaceholder}
-								<Button
-									on:click={header.column.getToggleSortingHandler()}
-									variant="link"
-									class="h-3 p-0 font-bold text-foreground hover:no-underline"
-								>
-									<svelte:component
-										this={flexRender(
-											header.column.columnDef.header,
-											header.getContext()
-										)}
-									/>
+								<Button on:click={header.column.getToggleSortingHandler()} variant="link" class="h-3 p-0 font-bold text-foreground hover:no-underline">
+									<svelte:component this={flexRender(header.column.columnDef.header, header.getContext())} />
 									{#if header.column.getIsSorted().toString() === "asc"}
 										<TriangleUp />
 									{:else if header.column.getIsSorted().toString() === "desc"}
@@ -171,10 +154,8 @@
 			{#each $table.getRowModel().rows as row}
 				<Table.Row class="border-none even:bg-secondary even:bg-opacity-25">
 					{#each row.getVisibleCells() as cell}
-						<Table.Cell class="py-5 first:px-5">
-							<svelte:component
-								this={flexRender(cell.column.columnDef.cell, cell.getContext())}
-							/>
+						<Table.Cell class="py-5 capitalize first:px-5">
+							<svelte:component this={flexRender(cell.column.columnDef.cell, cell.getContext())} />
 						</Table.Cell>
 					{/each}
 				</Table.Row>

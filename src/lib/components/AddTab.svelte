@@ -45,15 +45,12 @@
 		}
 	};
 
-	$: selectedTuning = $formData.tuning
-		? { label: $formData.tuning, value: $formData.tuning }
-		: undefined;
+	$: selectedTuning = $formData.tuning ? { label: $formData.tuning, value: $formData.tuning } : undefined;
 
-	$: selectedInstrument = $formData.instrument
-		? { label: $formData.instrument, value: $formData.instrument }
-		: undefined;
+	$: selectedInstrument = $formData.instrument ? { label: $formData.instrument, value: $formData.instrument } : undefined;
 </script>
 
+{@debug data}
 <svelte:window on:keyup={handleEscape} />
 <BackgroundBlur>
 	<Card.Root class="w-96 max-w-sm">
@@ -79,6 +76,7 @@
 					</Form.Control>
 				</Form.Field>
 
+				<!-- TUNINGS/INSTRUMENTS -->
 				<div class="flex gap-6">
 					<Form.Field {form} name="tuning" class="w-1/2">
 						<Form.Control let:attrs>
@@ -90,12 +88,18 @@
 								}}
 							>
 								<Select.Trigger {...attrs}>
-									<Select.Value placeholder={data.user.settings.tunings[0]} />
+									<Select.Value placeholder="" />
 								</Select.Trigger>
 								<Select.Content>
-									{#each data.user.settings.tunings as tuning}
-										<Select.Item value={tuning} label={tuning} />
-									{/each}
+									{#if data.user.settings.tunings.length != null}
+										{#each data.user.settings.tunings as tuning, i}
+											{#if i === 0}
+												<Select.Item value={tuning} label={tuning} />
+											{:else}
+												<Select.Item value={tuning} label={tuning} />
+											{/if}
+										{/each}
+									{/if}
 								</Select.Content>
 							</Select.Root>
 							<input hidden bind:value={$formData.tuning} name={attrs.name} />
@@ -113,12 +117,14 @@
 								}}
 							>
 								<Select.Trigger {...attrs}>
-									<Select.Value placeholder={data.user.settings.instruments[0]} />
+									<Select.Value placeholder="" />
 								</Select.Trigger>
 								<Select.Content>
-									{#each data.user.settings.instruments as instrument}
-										<Select.Item value={instrument} label={instrument} />
-									{/each}
+									{#if data.user.settings.instruments.length != null}
+										{#each data.user.settings.instruments as instrument}
+											<Select.Item value={instrument} label={instrument} />
+										{/each}
+									{/if}
 								</Select.Content>
 							</Select.Root>
 							<input hidden bind:value={$formData.instrument} name={attrs.name} />
@@ -144,9 +150,7 @@
 					{/if}
 				</Form.Button>
 			</form>
-			<Form.Button class="w-full" variant="outline" on:click={() => addTab.set(false)}
-				>Cancel</Form.Button
-			>
+			<Form.Button class="w-full" variant="outline" on:click={() => addTab.set(false)}>Cancel</Form.Button>
 		</Card.Content>
 	</Card.Root>
 </BackgroundBlur>

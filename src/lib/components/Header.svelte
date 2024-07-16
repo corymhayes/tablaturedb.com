@@ -26,22 +26,15 @@
 
 			<DropdownMenu.Root disableFocusFirstItem={true}>
 				<DropdownMenu.Trigger asChild let:builder>
-					<Button
-						builders={[builder]}
-						variant="outline"
-						size="icon"
-						class="overflow-hidden rounded-full"
-					>
+					<Button builders={[builder]} variant="outline" size="icon" class="overflow-hidden rounded-full">
 						<!-- <Avatar class="h-8 w-8" /> -->
-						<Avatar.Root>
+						<!-- <Avatar.Root>
 							<Avatar.Image src="./avatars/sb-avatar.jpg" />
-						</Avatar.Root>
+						</Avatar.Root> -->
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end">
-					<DropdownMenu.Item on:click={() => showSettings.set(true)}>
-						Settings
-					</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => showSettings.set(true)}>Settings</DropdownMenu.Item>
 					<DropdownMenu.Item>Support</DropdownMenu.Item>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item>

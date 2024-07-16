@@ -21,9 +21,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await locals.pb
-				.collection("users")
-				.authWithPassword(form.data.email, form.data.password);
+			await locals.pb.collection("users").authWithPassword(form.data.email, form.data.password);
 		} catch {
 			return setError(form, "password", "Email and/or password do not match");
 		}
@@ -44,11 +42,10 @@ export const actions: Actions = {
 				email: form.data.email,
 				emailVisibility: true,
 				password: form.data.password,
-				passwordConfirm: form.data.confirmPassword
+				passwordConfirm: form.data.confirmPassword,
+				settings: { instruments: [], tunings: [] }
 			});
-			await locals.pb
-				.collection("users")
-				.authWithPassword(form.data.email, form.data.password);
+			await locals.pb.collection("users").authWithPassword(form.data.email, form.data.password);
 		} catch (e) {
 			console.log(e);
 			return setError(form, "email", "User already exists");

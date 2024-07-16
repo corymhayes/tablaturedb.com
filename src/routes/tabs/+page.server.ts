@@ -3,13 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { pb } from "$lib/pocketbase";
 import { message, fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import {
-	addTabSchema,
-	updateTabSchema,
-	settingsSchema,
-	tuningSchema,
-	instrumentSchema
-} from "$lib/schema";
+import { addTabSchema, updateTabSchema, settingsSchema, tuningSchema, instrumentSchema } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user == null) {
@@ -39,12 +33,12 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("tabs").create({
-				song: addTabForm.data.song || null,
-				artist: addTabForm.data.artist || null,
-				tuning: addTabForm.data.tuning || null,
-				instrument: addTabForm.data.instrument || null,
+				song: addTabForm.data.song.toLowerCase() || null,
+				artist: addTabForm.data.artist.toLowerCase() || null,
+				tuning: addTabForm.data.tuning.toLowerCase() || null,
+				instrument: addTabForm.data.instrument.toLowerCase() || null,
 				users: locals.user.id,
-				link: addTabForm.data.link || null
+				link: addTabForm.data.link.toLowerCase() || null
 			});
 		} catch (e) {
 			console.log(e);
@@ -62,12 +56,12 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("tabs").update(`${updateTabForm.data.id}`, {
-				song: updateTabForm.data.song || null,
-				artist: updateTabForm.data.artist || null,
-				tuning: updateTabForm.data.tuning || null,
-				instrument: updateTabForm.data.instrument || null,
+				song: updateTabForm.data.song.toLowerCase() || null,
+				artist: updateTabForm.data.artist.toLowerCase() || null,
+				tuning: updateTabForm.data.tuning.toLowerCase() || null,
+				instrument: updateTabForm.data.instrument.toLowerCase() || null,
 				users: locals.user.id,
-				link: updateTabForm.data.link || null
+				link: updateTabForm.data.link.toLowerCase() || null
 			});
 		} catch (e) {
 			console.log(e);
