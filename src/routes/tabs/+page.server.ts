@@ -16,8 +16,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const tuningForm = await superValidate(zod(tuningSchema));
 
 	const records = await pb.collection("tabs").getFullList({
-		filter: `users.id ?= "${locals.user.id}"`
-		// sort: "song"
+		filter: `users.id ?= "${locals.user.id}"`,
+		sort: "artist, song"
 	});
 
 	return { records, addTabForm, updateTabForm, settingsForm, tuningForm };
@@ -33,12 +33,12 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("tabs").create({
-				song: addTabForm.data.song.toLowerCase() || null,
-				artist: addTabForm.data.artist.toLowerCase() || null,
-				tuning: addTabForm.data.tuning.toLowerCase() || null,
-				instrument: addTabForm.data.instrument.toLowerCase() || null,
+				song: addTabForm.data.song || null,
+				artist: addTabForm.data.artist || null,
+				tuning: addTabForm.data.tuning || null,
+				instrument: addTabForm.data.instrument || null,
 				users: locals.user.id,
-				link: addTabForm.data.link.toLowerCase() || null
+				link: addTabForm.data.link || null
 			});
 		} catch (e) {
 			console.log(e);
@@ -56,12 +56,12 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("tabs").update(`${updateTabForm.data.id}`, {
-				song: updateTabForm.data.song.toLowerCase() || null,
-				artist: updateTabForm.data.artist.toLowerCase() || null,
-				tuning: updateTabForm.data.tuning.toLowerCase() || null,
-				instrument: updateTabForm.data.instrument.toLowerCase() || null,
+				song: updateTabForm.data.song || null,
+				artist: updateTabForm.data.artist || null,
+				tuning: updateTabForm.data.tuning || null,
+				instrument: updateTabForm.data.instrument || null,
 				users: locals.user.id,
-				link: updateTabForm.data.link.toLowerCase() || null
+				link: updateTabForm.data.link || null
 			});
 		} catch (e) {
 			console.log(e);
