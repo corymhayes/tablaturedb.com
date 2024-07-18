@@ -1,9 +1,6 @@
 <script lang="ts">
 	// PROPS
-	export let data: PageData;
-
-	// TYPES
-	import type { PageData } from "./$types";
+	export let data;
 
 	// PACKAGES
 	import { superForm } from "sveltekit-superforms";
@@ -18,7 +15,7 @@
 
 	// VARIABLES
 	const form = superForm(data, { validators: zodClient(loginSchema) });
-	const { form: formData, enhance } = form;
+	const { form: loginForm, enhance } = form;
 </script>
 
 <Card.Root class="w-96 max-w-sm">
@@ -31,7 +28,7 @@
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>
-					<Input {...attrs} bind:value={$formData.email} />
+					<Input {...attrs} bind:value={$loginForm.email} />
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
@@ -39,7 +36,7 @@
 			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>
-					<Input {...attrs} type="password" bind:value={$formData.password} />
+					<Input {...attrs} type="password" bind:value={$loginForm.password} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

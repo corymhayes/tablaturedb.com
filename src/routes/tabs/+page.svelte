@@ -17,19 +17,12 @@
 	import Header from "$lib/components/Header.svelte";
 	import RowActions from "$lib/components/RowActions.svelte";
 	import { TriangleDown, TriangleUp } from "svelte-radix";
+	import type { RecordModel } from "pocketbase";
 
 	// VARIABLES
-	type Tab = {
-		id: string;
-		song: string;
-		artist: string;
-		tuning: string;
-		instrument: string;
-		link: string;
-	};
 	let sorting: SortingState = [];
 
-	const defaultColumns: ColumnDef<Tab>[] = [
+	const columns: ColumnDef<RecordModel>[] = [
 		{
 			accessorKey: "id"
 		},
@@ -76,8 +69,8 @@
 		}));
 	};
 
-	const options = writable<TableOptions<Tab>>({
-		columns: defaultColumns,
+	const options = writable<TableOptions<RecordModel>>({
+		columns: columns,
 		data: data.records,
 		state: {
 			columnVisibility: {

@@ -18,6 +18,7 @@
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { updateTabSchema } from "$lib/schema";
+	import type { Row } from "@tanstack/svelte-table";
 
 	// VARIABLES
 	let isLoading = false;
@@ -29,19 +30,22 @@
 	let link = "";
 	let dialogOpen = false;
 
-	const getInfo = (info) => {
-		let songInfo: string[] = [];
+	type Tab = {
+		id: string;
+		song: string;
+		artist: string;
+		tuning: string;
+		instrument: string;
+		link: string;
+	};
 
-		for (let i = 0; i < info.length; i++) {
-			songInfo.push(info[i].getValue());
-		}
-
-		id = songInfo[0];
-		song = songInfo[1];
-		artist = songInfo[2];
-		tuning = songInfo[3];
-		instrument = songInfo[4];
-		link = songInfo[5];
+	const getInfo = (info: Row<Tab>[]) => {
+		id = info[0].getValue("id");
+		song = info[1].getValue("song");
+		artist = info[2].getValue("artist");
+		tuning = info[3].getValue("tuning");
+		instrument = info[4].getValue("instrument");
+		link = info[5].getValue("link");
 	};
 
 	const form = superForm(data.updateTabForm, {

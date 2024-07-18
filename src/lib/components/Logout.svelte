@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
 	import * as Form from "$lib/components/ui/form";
-
 	import { applyAction, enhance } from "$app/forms";
 	import { pb } from "$lib/pocketbase";
 </script>
@@ -16,9 +14,5 @@
 		};
 	}}
 >
-	<Form.Button
-		tabindex="-1"
-		variant="link"
-		class="h-6 pl-0 font-normal text-white hover:no-underline">Logout</Form.Button
-	>
+	<Form.Button tabindex="-1" variant="link" class="h-6 pl-0 font-normal text-white hover:no-underline">Logout</Form.Button>
 </form>
