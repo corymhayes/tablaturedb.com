@@ -62,15 +62,11 @@
 	const { form: formData, enhance } = form;
 </script>
 
-{@debug settings}
-
 <Dialog.Root open={settings} onOpenChange={() => showSettings.set(false)}>
 	<Dialog.Content class="max-w-4xl">
 		<Dialog.Header>
 			<Dialog.Title class="text-2xl font-bold tracking-tight">Settings</Dialog.Title>
-			<Dialog.Description
-				>Update your user account as well as add/delete tunings or instruments</Dialog.Description
-			>
+			<Dialog.Description>Update your user account as well as add/delete tunings or instruments</Dialog.Description>
 		</Dialog.Header>
 		<Separator />
 		<div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -79,21 +75,9 @@
 					{#each items as item}
 						{@const isActive = selectedTab === item.href}
 
-						<Button
-							on:click={() => (selectedTab = item.href)}
-							variant="ghost"
-							class={cn(
-								!isActive && "hover:underline",
-								"relative justify-start hover:bg-transparent"
-							)}
-							data-sveltekit-noscroll
-						>
+						<Button on:click={() => (selectedTab = item.href)} variant="ghost" class={cn(!isActive && "hover:underline", "relative justify-start hover:bg-transparent")} data-sveltekit-noscroll>
 							{#if isActive}
-								<div
-									class="absolute inset-0 rounded-md bg-muted"
-									in:send={{ key: "active-sidebar-tab" }}
-									out:receive={{ key: "active-sidebar-tab" }}
-								/>
+								<div class="absolute inset-0 rounded-md bg-muted" in:send={{ key: "active-sidebar-tab" }} out:receive={{ key: "active-sidebar-tab" }} />
 							{/if}
 							<div class="relative">
 								{item.title}
@@ -148,9 +132,7 @@
 				{:else}
 					<div>
 						<h3 class="text-lg font-medium">User</h3>
-						<p class="text-sm text-muted-foreground">
-							Add/Edit tunings and instruments
-						</p>
+						<p class="text-sm text-muted-foreground">Add/Edit tunings and instruments</p>
 						<Separator class="my-5" />
 						<div>
 							<!-- TUNINGS -->
@@ -162,10 +144,7 @@
 											<Form.Control let:attrs>
 												<Form.Label>Tunings</Form.Label>
 												<div class="flex gap-5">
-													<Input
-														{...attrs}
-														bind:value={$formData.tuning}
-													/>
+													<Input {...attrs} bind:value={$formData.tuning} />
 													<Form.Button>Ok</Form.Button>
 												</div>
 											</Form.Control>
@@ -181,14 +160,8 @@
 											<form method="POST" use:enhance action="?/deleteTuning">
 												<Form.Field {form} name="tuning">
 													<Form.Control let:attrs>
-														<Input
-															{...attrs}
-															bind:value={tuning}
-															type="hidden"
-														/>
-														<Form.Button
-															class="m-0 h-4 bg-transparent p-0 shadow-none"
-														>
+														<Input {...attrs} bind:value={tuning} type="hidden" />
+														<Form.Button class="m-0 h-4 bg-transparent p-0 shadow-none">
 															<Cross2 size="14" class="mt-[-8px]" />
 														</Form.Button>
 													</Form.Control>
@@ -208,10 +181,7 @@
 											<Form.Control let:attrs>
 												<Form.Label>Instruments</Form.Label>
 												<div class="flex gap-5">
-													<Input
-														{...attrs}
-														bind:value={$formData.instrument}
-													/>
+													<Input {...attrs} bind:value={$formData.instrument} />
 													<Form.Button>Ok</Form.Button>
 												</div>
 											</Form.Control>
@@ -224,21 +194,11 @@
 									{#each data.user.settings.instruments as instrument}
 										<Badge class="mr-2 h-2 p-3 hover:bg-primary">
 											<div class="mr-2 text-xs">{instrument}</div>
-											<form
-												method="POST"
-												use:enhance
-												action="?/deleteInstrument"
-											>
+											<form method="POST" use:enhance action="?/deleteInstrument">
 												<Form.Field {form} name="instrument">
 													<Form.Control let:attrs>
-														<Input
-															{...attrs}
-															bind:value={instrument}
-															type="hidden"
-														/>
-														<Form.Button
-															class="m-0 h-4 bg-transparent p-0 shadow-none"
-														>
+														<Input {...attrs} bind:value={instrument} type="hidden" />
+														<Form.Button class="m-0 h-4 bg-transparent p-0 shadow-none">
 															<Cross2 size="14" class="mt-[-8px]" />
 														</Form.Button>
 													</Form.Control>

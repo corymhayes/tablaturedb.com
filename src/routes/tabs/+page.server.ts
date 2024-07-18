@@ -37,7 +37,7 @@ export const actions: Actions = {
 				artist: addTabForm.data.artist || null,
 				tuning: addTabForm.data.tuning || null,
 				instrument: addTabForm.data.instrument || null,
-				users: locals.user.id,
+				users: locals.user!.id,
 				link: addTabForm.data.link || null
 			});
 		} catch (e) {
@@ -60,7 +60,7 @@ export const actions: Actions = {
 				artist: updateTabForm.data.artist || null,
 				tuning: updateTabForm.data.tuning || null,
 				instrument: updateTabForm.data.instrument || null,
-				users: locals.user.id,
+				users: locals.user!.id,
 				link: updateTabForm.data.link || null
 			});
 		} catch (e) {
@@ -89,13 +89,13 @@ export const actions: Actions = {
 	addTuning: async ({ locals, request }) => {
 		const tuningForm = await superValidate(request, zod(tuningSchema));
 
-		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const records = await pb.collection("users").getOne(`${locals.user!.id}`);
 		const tunings = records.settings.tunings;
 		tunings.push(tuningForm.data.tuning);
 		records.settings.tunings = tunings;
 
 		try {
-			await locals.pb.collection("users").update(`${locals.user.id}`, {
+			await locals.pb.collection("users").update(`${locals.user!.id}`, {
 				settings: records.settings
 			});
 		} catch (e) {
@@ -107,7 +107,7 @@ export const actions: Actions = {
 	deleteTuning: async ({ locals, request }) => {
 		const tuningForm = await superValidate(request, zod(tuningSchema));
 
-		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const records = await pb.collection("users").getOne(`${locals.user!.id}`);
 		const tunings = records.settings.tunings;
 		const tuningIndex = tunings.indexOf(tuningForm.data.tuning);
 		tunings.splice(tuningIndex, 1);
@@ -115,7 +115,7 @@ export const actions: Actions = {
 		records.settings.tunings = tunings;
 
 		try {
-			await locals.pb.collection("users").update(`${locals.user.id}`, {
+			await locals.pb.collection("users").update(`${locals.user!.id}`, {
 				settings: records.settings
 			});
 		} catch (e) {
@@ -127,13 +127,13 @@ export const actions: Actions = {
 	addInstrument: async ({ locals, request }) => {
 		const instrumentForm = await superValidate(request, zod(instrumentSchema));
 
-		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const records = await pb.collection("users").getOne(`${locals.user!.id}`);
 		const instruments = records.settings.instruments;
 		instruments.push(instrumentForm.data.instrument);
 		records.settings.instruments = instruments;
 
 		try {
-			await locals.pb.collection("users").update(`${locals.user.id}`, {
+			await locals.pb.collection("users").update(`${locals.user!.id}`, {
 				settings: records.settings
 			});
 		} catch (e) {
@@ -145,7 +145,7 @@ export const actions: Actions = {
 	deleteInstrument: async ({ locals, request }) => {
 		const instrumentForm = await superValidate(request, zod(instrumentSchema));
 
-		const records = await pb.collection("users").getOne(`${locals.user.id}`);
+		const records = await pb.collection("users").getOne(`${locals.user!.id}`);
 		const instruments = records.settings.instruments;
 		const instrumentIndex = instruments.indexOf(instrumentForm.data.instrument);
 		instruments.splice(instrumentIndex, 1);
@@ -153,7 +153,7 @@ export const actions: Actions = {
 		records.settings.instruments = instruments;
 
 		try {
-			await locals.pb.collection("users").update(`${locals.user.id}`, {
+			await locals.pb.collection("users").update(`${locals.user!.id}`, {
 				settings: records.settings
 			});
 		} catch (e) {

@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { addTab, showSettings } from "$lib/stores/actions";
-
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import * as Avatar from "$lib/components/ui/avatar";
-	import { Button } from "$lib/components/ui/button";
-	import { Plus } from "svelte-radix";
-	import Logout from "./Logout.svelte";
-	import Settings from "./Settings.svelte";
-	import { HamburgerMenu } from "svelte-radix";
-
+	// PROPS
 	export let data;
 	export let fn;
+
+	// COMPONENTS
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import { Button } from "$lib/components/ui/button";
+	import { showSettings } from "$lib/stores/actions";
+	import { HamburgerMenu } from "svelte-radix";
+	import Logout from "./Logout.svelte";
+	import Settings from "./Settings.svelte";
+	import AddTab from "./AddTab.svelte";
 </script>
 
 <Settings {data} {fn} />
@@ -20,19 +20,12 @@
 		<h4 class="scroll-m-20 text-2xl font-semibold tracking-tight">TablatureDB</h4>
 
 		<div class="flex gap-3">
-			<Button class="bg-primary" on:click={() => addTab.set(true)}>
-				<Plus class="mr-1 h-5 w-5" />
-				Add tab
-			</Button>
+			<AddTab {data} {fn} />
 
 			<DropdownMenu.Root disableFocusFirstItem={true}>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button builders={[builder]} variant="secondary" size="icon" class="overflow-hidden">
 						<HamburgerMenu />
-						<!-- <Avatar class="h-8 w-8" /> -->
-						<!-- <Avatar.Root>
-							<Avatar.Image src="./avatars/sb-avatar.jpg" />
-						</Avatar.Root> -->
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end">

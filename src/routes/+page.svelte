@@ -86,16 +86,9 @@
 		{#each $table.getHeaderGroups() as headerGroup}
 			<Table.Row class="hover:bg-none!">
 				{#each headerGroup.headers as header}
-					<Table.Head
-						class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[10%] [&:nth-child(5)]:w-[40%]"
-					>
+					<Table.Head class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[10%] [&:nth-child(5)]:w-[40%]">
 						{#if !header.isPlaceholder}
-							<svelte:component
-								this={flexRender(
-									header.column.columnDef.header,
-									header.getContext()
-								)}
-							/>
+							<svelte:component this={flexRender(header.column.columnDef.header, header.getContext())} />
 						{/if}
 					</Table.Head>
 				{/each}
@@ -107,9 +100,7 @@
 			<Table.Row class="border-none even:bg-secondary even:bg-opacity-25">
 				{#each row.getVisibleCells() as cell}
 					<Table.Cell class="py-5 first:px-5">
-						<svelte:component
-							this={flexRender(cell.column.columnDef.cell, cell.getContext())}
-						/>
+						<svelte:component this={flexRender(cell.column.columnDef.cell, cell.getContext())} />
 					</Table.Cell>
 				{/each}
 			</Table.Row>

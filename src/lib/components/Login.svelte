@@ -1,17 +1,22 @@
 <script lang="ts">
-	// components
-	import * as Card from "$lib/components/ui/card";
-	import * as Form from "$lib/components/ui/form";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label/index.js";
+	// PROPS
+	export let data: PageData;
 
-	// packages
+	// TYPES
+	import type { PageData } from "./$types";
+
+	// PACKAGES
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { loginSchema } from "$lib/schema";
 
-	// data
-	export let data;
+	// COMPONENTS
+	import * as Card from "$lib/components/ui/card";
+	import * as Form from "$lib/components/ui/form";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
+
+	// VARIABLES
 	const form = superForm(data, { validators: zodClient(loginSchema) });
 	const { form: formData, enhance } = form;
 </script>
