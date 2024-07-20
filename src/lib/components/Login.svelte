@@ -25,7 +25,7 @@
 
 	<Card.Content>
 		<form method="POST" use:enhance class="grid gap-4" action="?/login">
-			// EMAIL INPUT
+			<!-- EMAIL INPUT -->
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>
@@ -34,7 +34,7 @@
 				</Form.Control>
 			</Form.Field>
 
-			// PASSWORD INPUT
+			<!-- PASSWORD INPUT -->
 			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>

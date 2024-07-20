@@ -26,7 +26,7 @@
 	<Card.Content class="grid gap-4">
 		<form method="POST" use:enhance class="grid gap-4" action="?/signup">
 			<div class="grid grid-cols-2 gap-4">
-				// FIRST NAME INPUT
+				<!-- FIRST NAME INPUT -->
 				<Form.Field {form} name="firstName">
 					<Form.Control let:attrs>
 						<Label>First Name</Label>
@@ -34,7 +34,7 @@
 					</Form.Control>
 				</Form.Field>
 
-				// LAST NAME INPUT
+				<!-- LAST NAME INPUT -->
 				<Form.Field {form} name="lastName">
 					<Form.Control let:attrs>
 						<Label>Last Name</Label>
@@ -43,7 +43,7 @@
 				</Form.Field>
 			</div>
 
-			// EMAIL INPUT
+			<!-- EMAIL INPUT -->
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>
@@ -52,7 +52,7 @@
 				</Form.Control>
 			</Form.Field>
 
-			// PASSWORD INPUT
+			<!-- PASSWORD INPUT -->
 			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>
@@ -61,7 +61,7 @@
 				</Form.Control>
 			</Form.Field>
 
-			// CONFIRM PASSWORD INPUT
+			<!-- CONFIRM PASSWORD INPUT -->
 			<Form.Field {form} name="confirmPassword" class="mb-5">
 				<Form.Control let:attrs>
 					<Label>Confirm Password</Label>
