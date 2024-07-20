@@ -1,16 +1,21 @@
 <script lang="ts">
+	// PROPS
+	export let data;
+
+	// PACKAGES
+	import { superForm } from "sveltekit-superforms";
+	import { zodClient } from "sveltekit-superforms/adapters";
+	import { signupSchema } from "$lib/schema";
+
+	// COMPONENTS
 	import * as Card from "$lib/components/ui/card";
 	import * as Form from "$lib/components/ui/form";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 
-	import { superForm } from "sveltekit-superforms";
-	import { zodClient } from "sveltekit-superforms/adapters";
-	import { signupSchema } from "$lib/schema";
-
-	export let data;
+	// VARIABLES
 	const form = superForm(data, { validators: zodClient(signupSchema) });
-	const { form: formData, enhance, errors } = form;
+	const { form: formData, enhance } = form;
 </script>
 
 <Card.Root class="w-full max-w-sm">
@@ -21,6 +26,7 @@
 	<Card.Content class="grid gap-4">
 		<form method="POST" use:enhance class="grid gap-4" action="?/signup">
 			<div class="grid grid-cols-2 gap-4">
+				// FIRST NAME INPUT
 				<Form.Field {form} name="firstName">
 					<Form.Control let:attrs>
 						<Label>First Name</Label>
@@ -28,6 +34,7 @@
 					</Form.Control>
 				</Form.Field>
 
+				// LAST NAME INPUT
 				<Form.Field {form} name="lastName">
 					<Form.Control let:attrs>
 						<Label>Last Name</Label>
@@ -36,6 +43,7 @@
 				</Form.Field>
 			</div>
 
+			// EMAIL INPUT
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>
@@ -44,6 +52,7 @@
 				</Form.Control>
 			</Form.Field>
 
+			// PASSWORD INPUT
 			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>
@@ -52,6 +61,7 @@
 				</Form.Control>
 			</Form.Field>
 
+			// CONFIRM PASSWORD INPUT
 			<Form.Field {form} name="confirmPassword" class="mb-5">
 				<Form.Control let:attrs>
 					<Label>Confirm Password</Label>
