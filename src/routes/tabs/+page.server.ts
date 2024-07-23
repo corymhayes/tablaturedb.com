@@ -14,13 +14,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const updateTabForm = await superValidate(zod(updateTabSchema));
 	const settingsForm = await superValidate(zod(settingsSchema));
 	const tuningForm = await superValidate(zod(tuningSchema));
+	const instrumentForm = await superValidate(zod(instrumentSchema));
 
 	const records = await pb.collection("tabs").getFullList({
 		filter: `users.id ?= "${locals.user.id}"`,
 		sort: "artist, song"
 	});
 
-	return { records, addTabForm, updateTabForm, settingsForm, tuningForm };
+	return { records, addTabForm, updateTabForm, settingsForm, tuningForm, instrumentForm };
 };
 
 export const actions: Actions = {

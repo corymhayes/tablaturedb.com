@@ -3,10 +3,17 @@
 	export let data;
 	export let fn;
 
+	// STORE
+	import { showTuning } from "$lib/stores/actions";
+	let open = false;
+	showTuning.subscribe((value) => {
+		open = value;
+	});
+
 	// PACKAGES
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
-	import { addTabSchema } from "$lib/schema";
+	import { addTabSchema, instrumentSchema, tuningSchema } from "$lib/schema";
 
 	// COMPONENTS
 	import * as Dialog from "$lib/components/ui/dialog";
@@ -19,34 +26,81 @@
 	import { Plus, Reload } from "svelte-radix";
 
 	// VARIABLES
-	let isLoading = false;
-	let dialogOpen = false;
+	let tabIsLoading = false;
+	let tabDialogOpen = false;
+	let tuningIsLoading = false;
+	let tuningDialogOpen = false;
+	let instrumentIsLoading = false;
+	let instrumentDialogOpen = false;
 
-	const form = superForm(data.addTabForm, {
+	const addTabForm = superForm(data.addTabForm, {
 		validators: zodClient(addTabSchema),
 		multipleSubmits: "prevent",
 		onSubmit: () => {
-			isLoading = true;
+			tabIsLoading = true;
 		},
 		onUpdated: ({ form }) => {
 			if (form.valid) {
-				isLoading = false;
-				dialogOpen = false;
+				tabIsLoading = false;
+				tabDialogOpen = false;
 				fn();
 				toast.success(form.message);
 			}
-		}
+		},
+		id: `addForm-${Math.random()}`
 	});
 
-	const { form: formData, enhance } = form;
+	const tuningForm = superForm(data.tuningForm, {
+		validators: zodClient(tuningSchema),
+		invalidateAll: "force",
+		multipleSubmits: "prevent",
+		onSubmit: () => {
+			tuningIsLoading = true;
+		},
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				selectedTuning = { label: form.data.tuning, value: form.data.tuning };
+				$addTabFormData.tuning = form.data.tuning;
+				tuningIsLoading = false;
+				tuningDialogOpen = false;
+				fn();
+				toast.success(form.message);
+			}
+		},
+		id: `tuningForm-${Math.random()}`
+	});
 
-	$: selectedTuning = $formData.tuning ? { label: $formData.tuning, value: $formData.tuning } : undefined;
-	$: selectedInstrument = $formData.instrument ? { label: $formData.instrument, value: $formData.instrument } : undefined;
+	const instrumentForm = superForm(data.instrumentForm, {
+		validators: zodClient(instrumentSchema),
+		invalidateAll: "force",
+		multipleSubmits: "prevent",
+		onSubmit: () => {
+			instrumentIsLoading = true;
+		},
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				selectedInstrument = { label: form.data.instrument, value: form.data.instrument };
+				$addTabFormData.instrument = form.data.instrument;
+				instrumentIsLoading = false;
+				instrumentDialogOpen = false;
+				fn();
+				toast.success(form.message);
+			}
+		},
+		id: `instrumentForm-${Math.random()}`
+	});
+
+	const { form: addTabFormData, enhance: addTabEnhance, formId: addFormId } = addTabForm;
+	const { form: tuningFormData, enhance: tuningFormEnhance, formId: tuningFormId } = tuningForm;
+	const { form: instrumentFormData, enhance: instrumentFormEnhance, formId: instrumentFormId } = instrumentForm;
+
+	$: selectedTuning = $addTabFormData.tuning ? { label: $addTabFormData.tuning, value: $addTabFormData.tuning } : undefined;
+	$: selectedInstrument = $addTabFormData.instrument ? { label: $addTabFormData.instrument, value: $addTabFormData.instrument } : undefined;
 </script>
 
-<Dialog.Root bind:open={dialogOpen}>
+<Dialog.Root bind:open={tabDialogOpen}>
 	<Dialog.Trigger>
-		<Button class="bg-primary pl-3 pr-4" variant="ghost" on:click={() => (dialogOpen = true)}>
+		<Button class="bg-primary pl-3 pr-4" variant="ghost" on:click={() => (tabDialogOpen = true)}>
 			<Plus class="mr-1 h-5 w-5" />
 			Add tab
 		</Button>
@@ -56,98 +110,162 @@
 			<Dialog.Title class="text-2xl font-bold tracking-tight">Add tab</Dialog.Title>
 		</Dialog.Header>
 
-		<form method="POST" use:enhance class="grid gap-3" action="?/addTab">
+		<form method="POST" use:addTabEnhance class="grid gap-3" action="?/addTab">
 			<!-- SONG INPUT -->
-			<Form.Field {form} name="song">
+			<Form.Field form={addTabForm} name="song">
 				<Form.Control let:attrs>
 					<Label>Song</Label>
-					<Input {...attrs} bind:value={$formData.song} />
+					<Input {...attrs} bind:value={$addTabFormData.song} />
 				</Form.Control>
 			</Form.Field>
 
 			<!-- ARTIST INPUT -->
-			<Form.Field {form} name="artist">
+			<Form.Field form={addTabForm} name="artist">
 				<Form.Control let:attrs>
 					<Label>Artist</Label>
-					<Input {...attrs} bind:value={$formData.artist} />
+					<Input {...attrs} bind:value={$addTabFormData.artist} />
 				</Form.Control>
 			</Form.Field>
 
 			<div class="flex gap-6">
 				<!-- TUNING INPUT -->
-				<Form.Field {form} name="tuning" class="w-1/2">
+				<Form.Field form={addTabForm} name="tuning" class="w-1/2">
 					<Form.Control let:attrs>
 						<Label>Tuning</Label>
 						<Select.Root
 							selected={selectedTuning}
 							onSelectedChange={(v) => {
-								v && ($formData.tuning = v.value);
+								v && ($addTabFormData.tuning = v.value);
 							}}
 						>
 							<Select.Trigger {...attrs}>
-								<Select.Value placeholder="" />
+								<Select.Value />
 							</Select.Trigger>
 							<Select.Content>
-								{#if data.user.settings.tunings.length != null}
-									{#each data.user.settings.tunings as tuning, i}
-										{#if i === 0}
-											<Select.Item value={tuning} label={tuning} />
-										{:else}
-											<Select.Item value={tuning} label={tuning} />
-										{/if}
-									{/each}
-								{/if}
+								{#each data.user.settings.tunings as tuning}
+									<Select.Item value={tuning} label={tuning}>
+										{tuning}
+									</Select.Item>
+								{/each}
+								<Select.Separator />
+								<Select.Item value={""} on:click={() => (tuningDialogOpen = true)}>Add tuning</Select.Item>
 							</Select.Content>
 						</Select.Root>
-						<input hidden bind:value={$formData.tuning} name={attrs.name} />
+						<Input type="hidden" bind:value={$addTabFormData.tuning} name={attrs.name} />
 						<Form.FieldErrors />
 					</Form.Control>
 				</Form.Field>
 
 				<!-- INSTRUMENT INPUT -->
-				<Form.Field {form} name="instrument" class="w-1/2">
+				<Form.Field form={addTabForm} name="instrument" class="w-1/2">
 					<Form.Control let:attrs>
 						<Label>Instrument</Label>
 						<Select.Root
 							selected={selectedInstrument}
 							onSelectedChange={(v) => {
-								v && ($formData.instrument = v.value);
+								v && ($addTabFormData.instrument = v.value);
 							}}
 						>
 							<Select.Trigger {...attrs}>
-								<Select.Value placeholder="" />
+								<Select.Value />
 							</Select.Trigger>
 							<Select.Content>
-								{#if data.user.settings.instruments.length != null}
-									{#each data.user.settings.instruments as instrument}
-										<Select.Item value={instrument} label={instrument} />
-									{/each}
-								{/if}
+								{#each data.user.settings.instruments as instrument}
+									<Select.Item value={instrument} label={instrument}>
+										{instrument}
+									</Select.Item>
+								{/each}
+								<Select.Separator />
+								<Select.Item value={""} on:click={() => (instrumentDialogOpen = true)}>Add instrument</Select.Item>
 							</Select.Content>
 						</Select.Root>
-						<input hidden bind:value={$formData.instrument} name={attrs.name} />
+						<Input type="hidden" bind:value={$addTabFormData.instrument} name={attrs.name} />
 						<Form.FieldErrors />
 					</Form.Control>
 				</Form.Field>
 			</div>
 
 			<!-- LINK INPUT -->
-			<Form.Field {form} name="link">
+			<Form.Field form={addTabForm} name="link">
 				<Form.Control let:attrs>
 					<Label>Link</Label>
-					<Input {...attrs} bind:value={$formData.link} />
+					<Input {...attrs} bind:value={$addTabFormData.link} />
 				</Form.Control>
 			</Form.Field>
 
 			<!-- SUBMIT BUTTON -->
 			<Form.Button class="my-3 w-full">
-				{#if isLoading}
+				{#if tabIsLoading}
 					<Reload class="mr-2 h-4 w-4 animate-spin" />
 					Add tab
 				{:else}
 					Add tab
 				{/if}
 			</Form.Button>
+		</form>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- TUNING DIALOG -->
+<Dialog.Root bind:open={tuningDialogOpen}>
+	<Dialog.Content class="sm:max-w-[425px]">
+		<Dialog.Header>
+			<Dialog.Title>Add Tuning</Dialog.Title>
+		</Dialog.Header>
+		<form method="POST" use:tuningFormEnhance action="?/addTuning">
+			<Form.Field form={tuningForm} name="tuning">
+				<Form.Control let:attrs>
+					<div class="grid gap-4 py-4">
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label class="text-right">Tuning</Label>
+							<Input {...attrs} bind:value={$tuningFormData.tuning} class="col-span-3" />
+							<Input type="hidden" name="__superform_id" bind:value={$tuningFormId} />
+						</div>
+					</div>
+					<Dialog.Footer>
+						<Form.Button class="my-3 w-full">
+							{#if tuningIsLoading}
+								<Reload class="mr-2 h-4 w-4 animate-spin" />
+								Add tuning
+							{:else}
+								Add tuning
+							{/if}
+						</Form.Button>
+					</Dialog.Footer>
+				</Form.Control>
+			</Form.Field>
+		</form>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- INSTRUMENT DIALOG -->
+<Dialog.Root bind:open={instrumentDialogOpen}>
+	<Dialog.Content class="sm:max-w-[425px]">
+		<Dialog.Header>
+			<Dialog.Title>Add Instrument</Dialog.Title>
+		</Dialog.Header>
+		<form method="POST" use:instrumentFormEnhance action="?/addInstrument">
+			<Form.Field form={instrumentForm} name="instrument">
+				<Form.Control let:attrs>
+					<div class="grid gap-4 py-4">
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label class="text-right">Instrument</Label>
+							<Input {...attrs} bind:value={$instrumentFormData.tuning} class="col-span-3" />
+							<Input type="hidden" name="__superform_id" bind:value={$instrumentFormId} />
+						</div>
+					</div>
+					<Dialog.Footer>
+						<Form.Button class="my-3 w-full">
+							{#if instrumentIsLoading}
+								<Reload class="mr-2 h-4 w-4 animate-spin" />
+								Add instrument
+							{:else}
+								Add instrument
+							{/if}
+						</Form.Button>
+					</Dialog.Footer>
+				</Form.Control>
+			</Form.Field>
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

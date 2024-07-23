@@ -62,7 +62,8 @@
 				fn();
 				toast.success(form.message);
 			}
-		}
+		},
+		id: `editForm-${Math.random()}`
 	});
 
 	const { form: formData, enhance } = form;
@@ -176,9 +177,9 @@
 			<Form.Button class="mt-3 w-full">
 				{#if isLoading}
 					<Reload class="mr-2 h-4 w-4 animate-spin" />
-					Add tab
+					Update tab
 				{:else}
-					Add tab
+					Update tab
 				{/if}
 			</Form.Button>
 		</form>

@@ -1,9 +1,0 @@
-// PB RULE
-// id = @request.auth.id
-
-
-// PROPS
-// TYPES
-// PACKAGES
-// COMPONENTS
-// VARIABLES

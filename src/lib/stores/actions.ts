@@ -5,3 +5,4 @@ export const editTab = writable(false);
 export const deleteTab = writable(false);
 export const tabInfo = writable([]);
 export const showSettings = writable(false);
+export const showTuning = writable(false);
