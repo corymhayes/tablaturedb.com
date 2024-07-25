@@ -21,11 +21,9 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		// TODO: Do something with the validated form.data
+		// Do something with the validated form.data
 		try {
-			const pass = await pb
-				.collection("users")
-				.getFirstListItem(`email="${form.data.email}"`);
+			const pass = await pb.collection("users").getFirstListItem(`email="${form.data.email}"`);
 
 			if (pass.status != 404) {
 				await pb.collection("users").requestPasswordReset(`${form.data.email}`);

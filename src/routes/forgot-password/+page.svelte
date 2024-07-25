@@ -1,18 +1,19 @@
 <script lang="ts">
+	// PROPS
+	export let data;
+
+	// PACKAGES
+	import { superForm } from "sveltekit-superforms";
+	import { zodClient } from "sveltekit-superforms/adapters";
+	import { forgotPasswordSchema } from "$lib/schema";
+	import { toast } from "svelte-sonner";
+
+	// COMPONENTS
 	import * as Card from "$lib/components/ui/card";
 	import * as Form from "$lib/components/ui/form";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { Button } from "$lib/components/ui/button";
-
-	import { superForm } from "sveltekit-superforms";
-	import { zodClient } from "sveltekit-superforms/adapters";
-	import { forgotPasswordSchema } from "$lib/schema";
-
-	import SuperDebug from "sveltekit-superforms";
-	import { toast } from "svelte-sonner";
-
-	export let data;
 
 	const form = superForm(data.form, {
 		validators: zodClient(forgotPasswordSchema),
@@ -28,9 +29,7 @@
 	<Card.Root class="w-[500px] border-none">
 		<Card.Header>
 			<Card.Title class="text-4xl">Forgot password?</Card.Title>
-			<Card.Description>
-				Enter your email below and a link will be sent to reset your password.
-			</Card.Description>
+			<Card.Description>Enter your email below and a link will be sent to reset your password.</Card.Description>
 		</Card.Header>
 
 		<Card.Content>
