@@ -12,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (pb.authStore.isValid) {
 			await pb.collection("users").authRefresh();
 		}
-	} catch (_) {
+	} catch {
 		// clear the auth store on failed refresh
 		pb.authStore.clear();
 	}

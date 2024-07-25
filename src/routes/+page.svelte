@@ -1,24 +1,10 @@
 <script lang="ts">
-	// types
-	import type { PageData } from "./$types";
-	import type { ColumnDef, TableOptions } from "@tanstack/svelte-table";
-
-	// packages
-	import { writable } from "svelte/store";
-	import { createSvelteTable, flexRender, getCoreRowModel } from "@tanstack/svelte-table";
-
-	// Components
-	import * as Table from "$lib/components/ui/table";
-	import * as Tabs from "$lib/components/ui/tabs";
-	import Login from "$lib/components/Login.svelte";
-	import SignUp from "$lib/components/SignUp.svelte";
-	import BackgroundBlur from "$lib/components/BackgroundBlur.svelte";
-
-	// data
-	import tabs from "$lib/data/tabs.json";
-
+	// PROPS
 	export let data: PageData;
 
+	// TYPES
+	import type { PageData } from "./$types";
+	import type { ColumnDef, TableOptions } from "@tanstack/svelte-table";
 	type Tab = {
 		song: string;
 		artist: string;
@@ -26,6 +12,19 @@
 		instrument: string;
 		link: string;
 	};
+
+	// PACKAGES
+	import { writable } from "svelte/store";
+	import { createSvelteTable, flexRender, getCoreRowModel } from "@tanstack/svelte-table";
+
+	// COMPONENTS
+	import * as Table from "$lib/components/ui/table";
+	import * as Tabs from "$lib/components/ui/tabs";
+	import Login from "$lib/components/Login.svelte";
+	import SignUp from "$lib/components/SignUp.svelte";
+
+	// VARIABLES
+	import tabs from "$lib/data/tabs.json";
 
 	const defaultColumns: ColumnDef<Tab>[] = [
 		{
@@ -64,7 +63,7 @@
 	const table = createSvelteTable(options);
 </script>
 
-<BackgroundBlur>
+<div class="fixed z-50 flex h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
 	<h1 class="mb-4 scroll-m-20 text-4xl font-extrabold tracking-tight">TablatureDB</h1>
 	<Tabs.Root value="login">
 		<Tabs.List class="grid w-full grid-cols-2">
@@ -79,7 +78,7 @@
 			<SignUp data={data.signupForm} />
 		</Tabs.Content>
 	</Tabs.Root>
-</BackgroundBlur>
+</div>
 
 <Table.Root>
 	<Table.Header>
