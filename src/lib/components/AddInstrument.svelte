@@ -1,22 +1,27 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import * as Select from "$lib/components/ui/select";
-	import { showTuning } from "$lib/stores/actions";
-	import * as Form from "$lib/components/ui/form";
-
+	// PROPS
 	export let userData;
 	export let title;
 
-	let open = false;
+	// PACKAGES
+	import { showTuning } from "$lib/stores/actions";
+
+	// COMPONENTS
+	import * as Dialog from "$lib/components/ui/dialog";
+	import * as Select from "$lib/components/ui/select";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
+
+	// VARIABLES
+	let open: boolean = false;
+	let tuning: string;
+	let selected: string = userData[0];
+
 	showTuning.subscribe((value) => {
 		open = value;
 	});
 
-	let tuning: string;
-	let selected = userData[0];
 	const add = () => {
 		userData.tunings.push(tuning);
 		showTuning.set(false);

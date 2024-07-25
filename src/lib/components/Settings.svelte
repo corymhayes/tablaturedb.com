@@ -1,28 +1,41 @@
 <script lang="ts">
-	import * as Dialog from "$lib/components/ui/dialog";
-	import * as Card from "$lib/components/ui/card";
-	import { Button } from "$lib/components/ui/button";
-	import { showSettings } from "$lib/stores/actions";
+	// PROPS
+	export let data;
+	export let fn;
+
+	// STORES
 	import { currentUser } from "$lib/stores/user";
-	import { Separator } from "$lib/components/ui/separator/";
-	import { Input } from "$lib/components/ui/input/";
-	import * as Form from "$lib/components/ui/form";
-	import { cn } from "../utils";
-	import { cubicInOut } from "svelte/easing";
-	import { crossfade } from "svelte/transition";
-	import { Badge } from "$lib/components/ui/badge";
-	import { Cross2 } from "svelte-radix";
+	let user;
+	currentUser.subscribe((value) => {
+		user = value;
+	});
 
-	import { tuningSchema } from "$lib/schema";
-	import { type SuperValidated, type Infer, superForm } from "sveltekit-superforms";
-	import { zodClient } from "sveltekit-superforms/adapters";
-
-	let className: string | undefined | null = undefined;
-
+	import { showSettings } from "$lib/stores/actions";
 	let settings = false;
 	showSettings.subscribe((value) => {
 		settings = value;
 	});
+
+	// PACKAGES
+	import { cn } from "../utils";
+	import { cubicInOut } from "svelte/easing";
+	import { crossfade } from "svelte/transition";
+	import { tuningSchema } from "$lib/schema";
+	import { superForm } from "sveltekit-superforms";
+	import { zodClient } from "sveltekit-superforms/adapters";
+
+	// COMPONENTS
+	import * as Card from "$lib/components/ui/card";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import * as Form from "$lib/components/ui/form";
+	import { Badge } from "$lib/components/ui/badge";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input/";
+	import { Separator } from "$lib/components/ui/separator/";
+	import { Cross2 } from "svelte-radix";
+
+	// VARIABLES
+	let className: string | undefined | null = undefined;
 
 	const [send, receive] = crossfade({
 		duration: 250,
@@ -41,13 +54,6 @@
 	];
 
 	$: selectedTab = "user";
-
-	export let data;
-	export let fn;
-	let user;
-	currentUser.subscribe((value) => {
-		user = value;
-	});
 
 	const form = superForm(data.tuningForm, {
 		validators: zodClient(tuningSchema),
@@ -74,7 +80,6 @@
 				<nav class={cn("flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1", className)}>
 					{#each items as item}
 						{@const isActive = selectedTab === item.href}
-
 						<Button on:click={() => (selectedTab = item.href)} variant="ghost" class={cn(!isActive && "hover:underline", "relative justify-start hover:bg-transparent")} data-sveltekit-noscroll>
 							{#if isActive}
 								<div class="absolute inset-0 rounded-md bg-muted" in:send={{ key: "active-sidebar-tab" }} out:receive={{ key: "active-sidebar-tab" }} />
@@ -136,7 +141,6 @@
 						<Separator class="my-5" />
 						<div>
 							<!-- TUNINGS -->
-
 							<Card.Root class="mb-5 w-3/4 border-none">
 								<Card.Content class="p-0">
 									<form method="POST" use:enhance action="?/addTuning">
@@ -173,7 +177,6 @@
 							</Card.Root>
 
 							<!-- INSTRUMENTS -->
-
 							<Card.Root class="my-5 w-3/4 border-none">
 								<Card.Content class="p-0">
 									<form method="POST" use:enhance action="?/addInstrument">
