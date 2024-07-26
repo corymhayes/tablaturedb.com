@@ -40,11 +40,15 @@
 			tabIsLoading = true;
 		},
 		onUpdated: ({ form }) => {
+			console.log(form);
 			if (form.valid) {
 				tabIsLoading = false;
 				tabDialogOpen = false;
 				fn();
 				toast.success(form.message);
+			} else {
+				tabIsLoading = false;
+				toast.error("ERROR");
 			}
 		},
 		id: `addForm-${Math.random()}`
@@ -127,9 +131,9 @@
 				</Form.Control>
 			</Form.Field>
 
-			<div class="flex gap-6">
+			<div class="grid-cols-add grid gap-6">
 				<!-- TUNING INPUT -->
-				<Form.Field form={addTabForm} name="tuning" class="w-1/2">
+				<Form.Field form={addTabForm} name="tuning">
 					<Form.Control let:attrs>
 						<Label>Tuning</Label>
 						<Select.Root
@@ -157,7 +161,7 @@
 				</Form.Field>
 
 				<!-- INSTRUMENT INPUT -->
-				<Form.Field form={addTabForm} name="instrument" class="w-1/2">
+				<Form.Field form={addTabForm} name="instrument">
 					<Form.Control let:attrs>
 						<Label>Instrument</Label>
 						<Select.Root
@@ -181,6 +185,14 @@
 						</Select.Root>
 						<Input type="hidden" bind:value={$addTabFormData.instrument} name={attrs.name} />
 						<Form.FieldErrors />
+					</Form.Control>
+				</Form.Field>
+
+				<!-- CAPO INPUT -->
+				<Form.Field form={addTabForm} name="capo">
+					<Form.Control let:attrs>
+						<Label>Capo</Label>
+						<Input {...attrs} bind:value={$addTabFormData.capo} />
 					</Form.Control>
 				</Form.Field>
 			</div>

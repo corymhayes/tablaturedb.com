@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { pb } from "$lib/pocketbase";
 import { message, fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { addTabSchema, updateTabSchema, settingsSchema, tuningSchema, instrumentSchema } from "$lib/schema";
+import { addTabSchema, updateTabSchema, settingsSchema, tuningSchema, instrumentSchema, deleteSchema } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user == null) {
@@ -15,13 +15,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const settingsForm = await superValidate(zod(settingsSchema));
 	const tuningForm = await superValidate(zod(tuningSchema));
 	const instrumentForm = await superValidate(zod(instrumentSchema));
+	const deleteForm = await superValidate(zod(deleteSchema));
 
 	const records = await pb.collection("tabs").getFullList({
 		filter: `users.id ?= "${locals.user.id}"`,
 		sort: "artist, song"
 	});
 
-	return { records, addTabForm, updateTabForm, settingsForm, tuningForm, instrumentForm };
+	return { records, addTabForm, updateTabForm, settingsForm, tuningForm, instrumentForm, deleteForm };
 };
 
 export const actions: Actions = {
@@ -38,6 +39,7 @@ export const actions: Actions = {
 				artist: addTabForm.data.artist || null,
 				tuning: addTabForm.data.tuning || null,
 				instrument: addTabForm.data.instrument || null,
+				capo: `${addTabForm.data.capo}` || null,
 				users: locals.user!.id,
 				link: addTabForm.data.link || null
 			});
@@ -61,6 +63,7 @@ export const actions: Actions = {
 				artist: updateTabForm.data.artist || null,
 				tuning: updateTabForm.data.tuning || null,
 				instrument: updateTabForm.data.instrument || null,
+				capo: `${updateTabForm.data.capo}` || null,
 				users: locals.user!.id,
 				link: updateTabForm.data.link || null
 			});
@@ -72,20 +75,20 @@ export const actions: Actions = {
 		return message(updateTabForm, "Tab updated!");
 	},
 	deleteTab: async ({ locals, request }) => {
-		const updateTabForm = await superValidate(request, zod(updateTabSchema));
+		const deleteForm = await superValidate(request, zod(deleteSchema));
 
-		if (!updateTabForm.valid) {
-			return fail(400, { updateTabForm });
+		if (!deleteForm.valid) {
+			return fail(400, { deleteForm });
 		}
 
 		try {
-			await locals.pb.collection("tabs").delete(`${updateTabForm.data.id}`);
+			await locals.pb.collection("tabs").delete(`${deleteForm.data.id}`);
 		} catch (e) {
 			console.log(e);
 			throw e;
 		}
 
-		return message(updateTabForm, "Tab deleted!");
+		return message(deleteForm, "Tab deleted!");
 	},
 	addTuning: async ({ locals, request }) => {
 		const tuningForm = await superValidate(request, zod(tuningSchema));

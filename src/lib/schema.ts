@@ -27,6 +27,7 @@ export const addTabSchema = z.object({
 	artist: z.string(),
 	tuning: z.string(),
 	instrument: z.string(),
+	capo: z.coerce.number(),
 	link: z.string()
 });
 
@@ -36,6 +37,7 @@ export const updateTabSchema = z.object({
 	artist: z.string(),
 	tuning: z.string(),
 	instrument: z.string(),
+	capo: z.coerce.number(),
 	link: z.string()
 });
 
@@ -51,6 +53,10 @@ export const tuningSchema = z.object({
 
 export const instrumentSchema = z.object({
 	instrument: z.string()
+});
+
+export const deleteSchema = z.object({
+	id: z.string()
 });
 
 export type SettingsSchema = typeof settingsSchema;

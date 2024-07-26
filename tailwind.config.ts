@@ -59,6 +59,9 @@ const config: Config = {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans]
+			},
+			gridTemplateColumns: {
+				add: "40% 40% 10%"
 			}
 		}
 	}

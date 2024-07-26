@@ -5,6 +5,7 @@
 	// TYPES
 	import type { PageData } from "./$types";
 	import type { ColumnDef, SortingState, OnChangeFn, TableOptions } from "@tanstack/svelte-table";
+	import type { RecordModel } from "pocketbase";
 
 	// PACKAGES
 	import { writable } from "svelte/store";
@@ -17,7 +18,6 @@
 	import Header from "$lib/components/Header.svelte";
 	import RowActions from "$lib/components/RowActions.svelte";
 	import { TriangleDown, TriangleUp } from "svelte-radix";
-	import type { RecordModel } from "pocketbase";
 
 	// VARIABLES
 	let sorting: SortingState = [];
@@ -41,6 +41,11 @@
 		{
 			accessorKey: "instrument",
 			header: "Instrument"
+		},
+		{
+			accessorKey: "capo",
+			header: "Capo",
+			cell: (props) => (props.getValue() === 0 ? "" : props.getValue())
 		},
 		{
 			accessorKey: "link",
@@ -99,7 +104,7 @@
 		{#each $table.getHeaderGroups() as headerGroup}
 			<Table.Row class="hover:bg-none! bg-secondary">
 				{#each headerGroup.headers as header}
-					<Table.Head class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[10%] [&:nth-child(5)]:w-[40%]">
+					<Table.Head class="py-5 first:px-5 [&:nth-child(1)]:w-[20%] [&:nth-child(2)]:w-[20%] [&:nth-child(3)]:w-[10%] [&:nth-child(4)]:w-[7%] [&:nth-child(5)]:w-[5%] [&:nth-child(6)]:w-[40%]">
 						{#if !header.isPlaceholder}
 							<Button on:click={header.column.getToggleSortingHandler()} variant="link" class="h-3 p-0 font-bold text-foreground hover:no-underline">
 								<svelte:component this={flexRender(header.column.columnDef.header, header.getContext())} />
