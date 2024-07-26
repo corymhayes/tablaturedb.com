@@ -45,6 +45,7 @@ export const actions: Actions = {
 				passwordConfirm: form.data.confirmPassword,
 				settings: { instruments: [], tunings: [] }
 			});
+			await locals.pb.collection("users").requestVerification(form.data.email);
 			await locals.pb.collection("users").authWithPassword(form.data.email, form.data.password);
 		} catch (e) {
 			console.log(e);

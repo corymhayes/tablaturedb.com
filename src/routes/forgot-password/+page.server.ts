@@ -14,7 +14,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ locals, request }) => {
 		const form = await superValidate(request, zod(forgotPasswordSchema));
 
 		if (!form.valid) {
@@ -23,12 +23,13 @@ export const actions = {
 
 		// Do something with the validated form.data
 		try {
-			const pass = await pb.collection("users").getFirstListItem(`email="${form.data.email}"`);
+			const pass = await locals.pb.collection("users").getFirstListItem(`email="coryhmc@gmail.com"`);
 
 			if (pass.status != 404) {
 				await pb.collection("users").requestPasswordReset(`${form.data.email}`);
 			}
-		} catch {
+		} catch (e) {
+			console.log(e);
 			return message(form, "Email not found");
 		}
 

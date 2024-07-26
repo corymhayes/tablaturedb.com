@@ -22,7 +22,7 @@
 		}
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance } = form;
 </script>
 
 <div class="mt-5 flex w-screen justify-center">
