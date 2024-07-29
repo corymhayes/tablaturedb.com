@@ -1,11 +1,8 @@
 import type { PageServerLoad } from "./$types.js";
-import PocketBase from "pocketbase";
 
 import { forgotPasswordSchema } from "$lib/schema";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-
-const pb = new PocketBase("https://pocketbase.tablaturedb.com");
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(forgotPasswordSchema));
@@ -23,10 +20,10 @@ export const actions = {
 
 		// Do something with the validated form.data
 		try {
-			const pass = await locals.pb.collection("users").getFirstListItem(`email="coryhmc@gmail.com"`);
+			const pass = await locals.pb.collection("users").getFirstListItem(`email="${form.data.email}"`);
 
 			if (pass.status != 404) {
-				await pb.collection("users").requestPasswordReset(`${form.data.email}`);
+				await locals.pb.collection("users").requestPasswordReset(`${form.data.email}`);
 			}
 		} catch (e) {
 			console.log(e);
