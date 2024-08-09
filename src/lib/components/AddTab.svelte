@@ -131,7 +131,7 @@
 				</Form.Control>
 			</Form.Field>
 
-			<div class="grid-cols-add grid gap-6">
+			<div class="grid grid-cols-add gap-6">
 				<!-- TUNING INPUT -->
 				<Form.Field form={addTabForm} name="tuning">
 					<Form.Control let:attrs>
@@ -151,7 +151,9 @@
 										{tuning}
 									</Select.Item>
 								{/each}
-								<Select.Separator />
+								{#if data.user.settings.tunings.length > 0}
+									<Select.Separator />
+								{/if}
 								<Select.Item value={""} on:click={() => (tuningDialogOpen = true)}>Add tuning</Select.Item>
 							</Select.Content>
 						</Select.Root>
@@ -179,7 +181,9 @@
 										{instrument}
 									</Select.Item>
 								{/each}
-								<Select.Separator />
+								{#if data.user.settings.instruments.length > 0}
+									<Select.Separator />
+								{/if}
 								<Select.Item value={""} on:click={() => (instrumentDialogOpen = true)}>Add instrument</Select.Item>
 							</Select.Content>
 						</Select.Root>
