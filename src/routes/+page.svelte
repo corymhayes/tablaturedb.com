@@ -61,11 +61,17 @@
 	});
 
 	const table = createSvelteTable(options);
+
+	let tabValue: string = "login";
+
+	const tabChange = (e: string) => {
+		tabValue = e;
+	};
 </script>
 
 <div class="fixed z-50 flex h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
 	<h1 class="mb-4 scroll-m-20 text-4xl font-extrabold tracking-tight">TablatureDB</h1>
-	<Tabs.Root value="login">
+	<Tabs.Root value={tabValue} onValueChange={(e) => tabChange(e)}>
 		<Tabs.List class="grid w-full grid-cols-2">
 			<Tabs.Trigger value="login">Login</Tabs.Trigger>
 			<Tabs.Trigger value="signup">Sign Up</Tabs.Trigger>
@@ -75,7 +81,7 @@
 			<Login data={data.loginForm} />
 		</Tabs.Content>
 		<Tabs.Content value="signup">
-			<SignUp data={data.signupForm} />
+			<SignUp data={data.signupForm} bind:tabValue />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

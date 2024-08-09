@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from "./$types";
 
 import { loginSchema, signupSchema } from "$lib/schema";
-import { fail, superValidate, setError } from "sveltekit-superforms";
+import { fail, superValidate, setError, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "@sveltejs/kit";
 
@@ -22,6 +22,10 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("users").authWithPassword(form.data.email, form.data.password);
+			if (!locals?.pb?.authStore?.model?.verified) {
+				locals.pb.authStore.clear();
+				return message(form, { notValidated: true, info: "Error: Account needs to be verified" });
+			}
 		} catch {
 			return setError(form, "password", "Email and/or password do not match");
 		}
@@ -37,8 +41,6 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection("users").create({
-				firstName: form.data.firstName || null,
-				lastName: form.data.lastName || null,
 				email: form.data.email,
 				emailVisibility: true,
 				password: form.data.password,
@@ -46,12 +48,10 @@ export const actions: Actions = {
 				settings: { instruments: [], tunings: [] }
 			});
 			await locals.pb.collection("users").requestVerification(form.data.email);
-			await locals.pb.collection("users").authWithPassword(form.data.email, form.data.password);
+			return message(form, { success: true });
 		} catch (e) {
 			console.log(e);
 			return setError(form, "email", "User already exists");
 		}
-
-		redirect(303, "/tabs");
 	}
 };

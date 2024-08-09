@@ -12,10 +12,18 @@
 	import * as Form from "$lib/components/ui/form";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
+	import { toast } from "svelte-sonner";
 
 	// VARIABLES
-	const form = superForm(data, { validators: zodClient(loginSchema) });
-	const { form: loginForm, enhance } = form;
+	const loginForm = superForm(data, {
+		validators: zodClient(loginSchema),
+		onUpdated: ({ form }) => {
+			if (form.message.notValidated) {
+				toast.error(form.message.info);
+			}
+		}
+	});
+	const { form: loginFormData, enhance } = loginForm;
 </script>
 
 <Card.Root class="w-96 max-w-sm">
@@ -26,19 +34,19 @@
 	<Card.Content>
 		<form method="POST" use:enhance class="grid gap-4" action="?/login">
 			<!-- EMAIL INPUT -->
-			<Form.Field {form} name="email">
+			<Form.Field form={loginForm} name="email">
 				<Form.Control let:attrs>
 					<Label>Email</Label>
-					<Input {...attrs} bind:value={$loginForm.email} />
-					<Form.FieldErrors />
+					<Input {...attrs} bind:value={$loginFormData.email} />
 				</Form.Control>
+				<Form.FieldErrors />
 			</Form.Field>
 
 			<!-- PASSWORD INPUT -->
-			<Form.Field {form} name="password">
+			<Form.Field form={loginForm} name="password">
 				<Form.Control let:attrs>
 					<Label>Password</Label>
-					<Input {...attrs} type="password" bind:value={$loginForm.password} />
+					<Input {...attrs} type="password" bind:value={$loginFormData.password} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

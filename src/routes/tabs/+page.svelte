@@ -61,6 +61,7 @@
 	const setSorting: OnChangeFn<SortingState> = (updater) => {
 		if (updater instanceof Function) {
 			sorting = updater(sorting);
+			console.log(sorting);
 		} else {
 			sorting = updater;
 		}
