@@ -18,7 +18,7 @@
 	let instrument = "";
 	let link = "";
 	let header = "artist";
-	let tabs = liveQuery(() => db.tabs.orderBy("song").toArray());
+	let tabs = liveQuery(() => db.tabs.orderBy(header).toArray());
 
 	let columnDefs = ["Song", "Artist", "Tuning", "Instrument", "Link"];
 
@@ -54,6 +54,8 @@
 		tuning = "";
 		instrument = "";
 		link = "";
+
+		tabs = liveQuery(() => db.tabs.orderBy(header).toArray());
 	};
 
 	const editTab = async (tab: Tab) => {
@@ -76,11 +78,17 @@
 
 <div class="flex h-screen w-screen items-start justify-center">
 	{#if !$tabs}
-		<h1>Loading</h1>
+		<div class="flex size-full animate-pulse items-center justify-center">
+			<h1 class="text-3xl font-bold leading-[1.75rem] tracking-tight">
+				Tablature<br /><span class="text-primary">DB</span>
+			</h1>
+		</div>
 	{:else}
 		<div class="w-full">
-			<div class="flex items-center justify-between px-5 pt-5">
-				<h1 class="text-2xl font-bold tracking-tight">TablatureDB</h1>
+			<div class="flex h-14 items-center px-5">
+				<h1 class="text-2xl font-bold tracking-tight">
+					Tablature<span class="inline-block text-primary">DB</span>
+				</h1>
 			</div>
 			<Table.Root class="w-full">
 				<Table.Header>
@@ -123,7 +131,7 @@
 							<Table.Cell class="w-[10%] pl-5">{tab.tuning}</Table.Cell>
 							<Table.Cell class="w-[10%] pl-5">{tab.instrument}</Table.Cell>
 							<Table.Cell class="w-[50%] pl-5"><Link link={tab.link} /></Table.Cell>
-							<Table.Cell class="flex items-end justify-end gap-2">
+							<Table.Cell class="flex items-end justify-end">
 								<Button variant="ghost" size="icon" class="size-8" on:click={() => editTab(tab)}>
 									<Pencil1 size={16} />
 								</Button>

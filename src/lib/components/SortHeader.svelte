@@ -32,7 +32,7 @@
 	<Button
 		variant="link"
 		on:click={() => changeSort(columnName.toLocaleLowerCase())}
-		class="m-0 w-full justify-start py-7 pl-0 text-muted-foreground hover:no-underline"
+		class="m-0 w-full justify-start py-3 pl-0 text-muted-foreground hover:no-underline"
 	>
 		<div class="flex items-end gap-1">
 			{columnName}
